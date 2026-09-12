@@ -10,11 +10,14 @@
   const GITHUB_API_LATEST = 'https://api.github.com/repos/' + REPO + '/releases/latest';
   const GITHUB_API_REPO = 'https://api.github.com/repos/' + REPO;
   
-  // Default Fallback URLs in case API is ratelimited or before first formal release tag
+  // Default Fallback URLs
   const FALLBACK_VERSION = 'v0.1.0+1';
   const FALLBACK_APK_NAME = 'Galatea-Link-v0.1.0+1.apk';
   const FALLBACK_GITHUB_URL = 'https://github.com/' + REPO + '/releases/latest/download/' + FALLBACK_APK_NAME;
   const FALLBACK_RELEASE_PAGE = 'https://github.com/' + REPO + '/releases';
+
+  // Upstream cards.cdb official raw link
+  const CDB_RAW_GITHUB = 'https://raw.githubusercontent.com/mycard/ygopro-database/master/locales/zh-CN/cards.cdb';
 
   // Domestic Mirror Proxy prefix
   const FAST_MIRROR_PREFIX = 'https://ghfast.top/';
@@ -22,6 +25,7 @@
   // State
   let currentChannel = 'mirror'; // 'mirror' | 'github'
   let latestApkUrl = FALLBACK_GITHUB_URL;
+  let latestGkgUrl = '';
   let currentVersion = FALLBACK_VERSION;
 
   // DOM Elements
@@ -31,6 +35,8 @@
   const heroTagVersion = document.getElementById('hero-tag-version');
   const downloadAssetMeta = document.getElementById('download-asset-meta');
   const starCountBadge = document.getElementById('github-star-count');
+  const cdbDownloadBtn = document.getElementById('cdb-download-btn');
+  const gkgDownloadBtn = document.getElementById('gkg-download-btn');
 
   // QR Modal Elements
   const qrModal = document.getElementById('qr-modal');
@@ -49,7 +55,7 @@
     return latestApkUrl;
   }
 
-  // Update Download Button State
+  // Update Download Buttons State
   function updateDownloadBtn() {
     const targetUrl = getActiveDownloadUrl();
     if (mainDownloadBtn) {
@@ -61,6 +67,25 @@
     // Update QR Code
     if (qrCodeImg && targetUrl) {
       qrCodeImg.src = 'https://quickchart.io/qr?text=' + encodeURIComponent(targetUrl) + '&size=240&margin=1';
+    }
+
+    // Update cards.cdb link
+    if (cdbDownloadBtn) {
+      if (currentChannel === 'mirror') {
+        cdbDownloadBtn.href = FAST_MIRROR_PREFIX + CDB_RAW_GITHUB;
+      } else {
+        cdbDownloadBtn.href = CDB_RAW_GITHUB;
+      }
+    }
+
+    // Update GKG model pack link
+    if (gkgDownloadBtn) {
+      const gkgBase = latestGkgUrl || FALLBACK_RELEASE_PAGE;
+      if (latestGkgUrl && currentChannel === 'mirror') {
+        gkgDownloadBtn.href = FAST_MIRROR_PREFIX + gkgBase;
+      } else {
+        gkgDownloadBtn.href = gkgBase;
+      }
     }
   }
 
@@ -89,8 +114,9 @@
         if (heroTagVersion) heroTagVersion.innerText = currentVersion;
       }
 
-      // Find APK asset
+      // Check assets
       if (Array.isArray(data.assets) && data.assets.length > 0) {
+        // Find APK asset
         const apkAsset = data.assets.find(a => a.name.endsWith('.apk')) || data.assets[0];
         if (apkAsset && apkAsset.browser_download_url) {
           latestApkUrl = apkAsset.browser_download_url;
@@ -98,6 +124,12 @@
           if (downloadAssetMeta) {
             downloadAssetMeta.innerText = '版本 ' + currentVersion + ' · ' + sizeMB + ' MB · 适配 Android 8.0+';
           }
+        }
+
+        // Find GKG model asset if present in release
+        const gkgAsset = data.assets.find(a => a.name.endsWith('.gkg') || a.name.endsWith('.onnx'));
+        if (gkgAsset && gkgAsset.browser_download_url) {
+          latestGkgUrl = gkgAsset.browser_download_url;
         }
       } else {
         latestApkUrl = data.html_url || FALLBACK_RELEASE_PAGE;

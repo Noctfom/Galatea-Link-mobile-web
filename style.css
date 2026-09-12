@@ -196,7 +196,7 @@ body {
 
 /* Hero Section */
 .hero-section {
-  padding: 4.5rem 1.5rem 3rem;
+  padding: 4.5rem 1.5rem 2.5rem;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -483,6 +483,164 @@ body {
 .meta-dot.blue { background: var(--cyber-cyan); }
 .meta-dot.purple { background: var(--primary); }
 
+/* Resources Section */
+.resources-section {
+  padding: 3rem 1.5rem 4rem;
+}
+
+.resources-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.resource-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.resource-card:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+  background: var(--bg-card-hover);
+  transform: translateY(-3px);
+  box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.4);
+}
+
+.resource-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.resource-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.resource-icon-box.cyan { background: rgba(6, 182, 212, 0.15); color: #67e8f9; }
+.resource-icon-box.purple { background: rgba(139, 92, 246, 0.15); color: #c4b5fd; }
+
+.resource-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.res-tag {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+}
+
+.res-tag.required {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+}
+
+.res-tag.purple {
+  background: rgba(139, 92, 246, 0.15);
+  color: #c4b5fd;
+}
+
+.res-tag.baseline {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+}
+
+.res-source-link {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.res-source-link:hover {
+  color: var(--cyber-cyan);
+  text-decoration: underline;
+}
+
+.resource-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--text-main);
+}
+
+.resource-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  flex: 1;
+}
+
+.resource-desc code {
+  font-family: var(--font-mono);
+  background: rgba(255, 255, 255, 0.08);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 0.78rem;
+  color: #e2e8f0;
+}
+
+.resource-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.res-download-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--text-main);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.res-download-btn:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.35);
+  transform: translateY(-1px);
+}
+
+.res-download-btn.secondary:hover {
+  background: #6366f1;
+  border-color: #6366f1;
+}
+
+.res-guide-tip {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  text-align: center;
+}
+
 /* Section Header */
 .section-header {
   text-align: center;
@@ -503,7 +661,7 @@ body {
 
 /* Bento Grid */
 .features-section {
-  padding: 5rem 1.5rem 3rem;
+  padding: 3rem 1.5rem;
 }
 
 .bento-grid {
@@ -931,6 +1089,9 @@ body {
 @media (max-width: 840px) {
   .hero-title {
     font-size: 2.1rem;
+  }
+  .resources-grid {
+    grid-template-columns: 1fr;
   }
   .bento-grid {
     grid-template-columns: 1fr;

@@ -41,6 +41,7 @@
       </a>
 
       <nav class="nav-links">
+        <a href="#resources" class="nav-link">扩展资源包</a>
         <a href="#features" class="nav-link">核心特性</a>
         <a href="#install" class="nav-link">安装指引</a>
         <a href="#changelog" class="nav-link">更新日志</a>
@@ -153,6 +154,86 @@
       </div>
     </section>
 
+    <!-- Essential Resources & Models Section -->
+    <section class="resources-section container" id="resources">
+      <div class="section-header">
+        <h2 class="section-title">必备与扩展数据包</h2>
+        <p class="section-subtitle">
+          应用本体采用轻量化解耦设计，卡片数据库与 AI 决策模型包独立分发并支持自由替换与扩充
+        </p>
+      </div>
+
+      <div class="resources-grid">
+        <!-- Resource Card 1: cards.cdb -->
+        <div class="resource-card">
+          <div class="resource-card-header">
+            <div class="resource-icon-box cyan">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+                <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+              </svg>
+            </div>
+            <div class="resource-badges">
+              <span class="res-tag required">基础运行必备</span>
+              <a href="https://github.com/mycard/ygopro-database" target="_blank" rel="noopener" class="res-source-link" title="前往官方数据库开源仓库">
+                <span>官方上游: mycard/ygopro-database ↗</span>
+              </a>
+            </div>
+          </div>
+
+          <h3 class="resource-name">YGOPro 官方卡片数据库 (cards.cdb)</h3>
+          <p class="resource-desc">
+            提供全量卡片文本、卡密密码、数值属性与卡组构建规则。为保证卡片数据的及时性与官方一致性，本数据库由官方开源项目 <code>mycard/ygopro-database</code> 维护，直接同步获取最新发行卡片数据。
+          </p>
+
+          <div class="resource-actions">
+            <a href="https://ghfast.top/https://github.com/mycard/ygopro-database/raw/master/locales/zh-CN/cards.cdb" id="cdb-download-btn" class="res-download-btn" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 5v14M19 12l-7 7-7-7"/>
+              </svg>
+              <span>下载 cards.cdb (中文最新)</span>
+            </a>
+            <div class="res-guide-tip">
+              💡 下载后放入应用本地数据目录即可自动生效
+            </div>
+          </div>
+        </div>
+
+        <!-- Resource Card 2: .gkg Model Pack -->
+        <div class="resource-card">
+          <div class="resource-card-header">
+            <div class="resource-icon-box purple">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.5h-2v-2h2zm0-4h-2V7h2z"/>
+              </svg>
+            </div>
+            <div class="resource-badges">
+              <span class="res-tag purple">Core 决策必备</span>
+              <span class="res-tag baseline">社区基线推荐包</span>
+            </div>
+          </div>
+
+          <h3 class="resource-name">GKG 预训练决策模型协议包 (.gkg)</h3>
+          <p class="resource-desc">
+            驱动本地 ONNX 引擎执行智能出牌与对局推演的核心权重包。目前由作者独立训练并持续迭代分发（作为基线模型，非全卡组万能解），完全独立于 APK 客户端，支持自由导入任意社区自训练模型。
+          </p>
+
+          <div class="resource-actions">
+            <a href="https://github.com/Noctfom/Galatea-Link-mobile/releases" id="gkg-download-btn" class="res-download-btn secondary" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 5v14M19 12l-7 7-7-7"/>
+              </svg>
+              <span>获取推荐 GKG 模型包</span>
+            </a>
+            <div class="res-guide-tip">
+              💡 随 Releases 附件独立发布与演进更新
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Bento Grid Features Section -->
     <section class="features-section container" id="features">
       <div class="section-header">
@@ -232,32 +313,32 @@
     <!-- Installation Guide Section -->
     <section class="guide-section container" id="install">
       <div class="section-header">
-        <h2 class="section-title">Android 安装指引</h2>
-        <p class="section-subtitle">非应用商店安装包，请跟随以下简易步骤完成安装授权</p>
+        <h2 class="section-title">Android 安装与部署指引</h2>
+        <p class="section-subtitle">非应用商店安装包，请跟随以下简易步骤完成安装授权与数据准备</p>
       </div>
 
       <div class="guide-steps-grid">
         <div class="guide-step-card">
           <div class="step-num">01</div>
-          <h4 class="step-title">点击下载 APK</h4>
+          <h4 class="step-title">安装主程序 APK</h4>
           <p class="step-desc">
-            点击上方主下载按钮，下载最新版 <code>Galatea-Link.apk</code> 安装包文件至您的手机存储中。
+            下载最新版 <code>Galatea-Link.apk</code> 安装包，如遇系统安全提示请选择「允许来自此来源的应用」。
           </p>
         </div>
 
         <div class="guide-step-card">
           <div class="step-num">02</div>
-          <h4 class="step-title">允许安装未知应用</h4>
+          <h4 class="step-title">导入卡片数据库与模型包</h4>
           <p class="step-desc">
-            在系统安全弹窗提示时，进入系统设置选择「允许来自此来源的应用」或信任浏览器下载源。
+            下载 <code>cards.cdb</code> 与推荐的 <code>.gkg</code> 权重包，放置于手机应用的数据目录下以激活完整 Core 功能。
           </p>
         </div>
 
         <div class="guide-step-card">
           <div class="step-num">03</div>
-          <h4 class="step-title">启动并导入卡组</h4>
+          <h4 class="step-title">连接服务器开启对局</h4>
           <p class="step-desc">
-            安装成功后启动应用，连接您习惯的服务器（如本地房间或 233 房间），即刻开启智能决斗体验！
+            启动应用，连接本地房间或 233 在线房间，上传卡组并选择适合的决策模式，即刻开启智能决斗！
           </p>
         </div>
       </div>
@@ -325,7 +406,7 @@
           <span>Galatea-Link</span>
         </div>
         <p class="footer-disclaimer">
-          本软件为非商业、个人自制的开源社区工具项目。YGOPro / MDPro3 协议及相关卡牌游戏美术资产与商标均归其各自版权所有者所有。
+          本软件为非商业、个人自制的开源社区工具项目。YGOPro / MDPro3 协议及相关卡牌游戏美术资产与商标均归其各自版权所有者所有。卡片数据库数据由开源项目 <a href="https://github.com/mycard/ygopro-database" target="_blank" rel="noopener" style="color:var(--text-muted); text-decoration:underline;">mycard/ygopro-database</a> 维护并提供。
         </p>
       </div>
 
