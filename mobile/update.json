@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "channel": "stable",
+  "version_name": "0.2.1",
+  "version_code": 5,
+  "minimum_supported_version_code": 1,
+  "download_url": "https://github.com/Noctfom/Galatea-Link-mobile/releases/download/v0.2.1/Galatea-Link-mobile-v0.2.1-universal.apk",
+  "release_page_url": "https://github.com/Noctfom/Galatea-Link-mobile/releases/tag/v0.2.1",
+  "sha256": "935b342c2b48fe1749fc1f54b96937614da61bdd17f4e2714906f5d67e516ad0",
+  "release_notes": "首个公开测试版，支持 Android 独立连接 MDPro3/YGOPro、卡组与资源管理、Core V3 ONNX 与 LLM 混合决策、对局聊天及诊断日志导出",
+  "published_at": "2026-09-12T21:45:12.8025220Z"
+}

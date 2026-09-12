@@ -12,6 +12,8 @@
 
 本项目为纯静态结构（HTML5 + CSS3 + Vanilla JS），可一键部署至 Vercel 或 Cloudflare Pages：
 
+应用稳定版更新清单位于 `mobile/update.json`，部署后必须能够通过 `https://galatea.noctfom.top/mobile/update.json` 直接访问。应先发布清单中指向的 GitHub Release 和 APK，再更新该文件，避免客户端读取到尚不存在的下载地址
+
 ### 部署至 Vercel
 1. 将本目录推送到您的 GitHub 新仓库（例如 `Noctfom/galatea-link-landing`）；
 2. 登录 [Vercel](https://vercel.com/)，点击 **Add New Project** 并导入该仓库；

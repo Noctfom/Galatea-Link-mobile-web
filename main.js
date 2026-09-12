@@ -11,8 +11,8 @@
   const GITHUB_API_REPO = 'https://api.github.com/repos/' + REPO;
   
   // Default Fallback URLs
-  const FALLBACK_VERSION = 'v0.1.0+1';
-  const FALLBACK_APK_NAME = 'Galatea-Link-v0.1.0+1.apk';
+  const FALLBACK_VERSION = 'v0.2.1';
+  const FALLBACK_APK_NAME = 'Galatea-Link-mobile-v0.2.1-universal.apk';
   const FALLBACK_GITHUB_URL = 'https://github.com/' + REPO + '/releases/latest/download/' + FALLBACK_APK_NAME;
   const FALLBACK_RELEASE_PAGE = 'https://github.com/' + REPO + '/releases';
 
