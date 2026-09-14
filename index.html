@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Galatea-Link · 独立移动端游戏 AI Agent 客户端</title>
   <meta name="description" content="Galatea-Link 的独立 Flutter 移动客户端，直接连接 MDPro3/YGOPro 游戏服务器并在设备本地运行 Agent 流程，不依赖 PC Link API、AstrBot、Python 或 Torch。">
-  <meta name="keywords" content="Galatea-Link, YGOPro, MDPro3, 游戏AI, Flutter, 游戏Agent, ONNX, 移动端">
+  <meta name="keywords" content="Galatea-Link, YGOPro, MDPro3, 游戏AI, Flutter, 游戏Agent, ONNX, 移动端, GKG">
   
   <!-- Open Graph / Social Media -->
   <meta property="og:type" content="website">
@@ -41,7 +41,7 @@
       </a>
 
       <nav class="nav-links">
-        <a href="#resources" class="nav-link">扩展资源包</a>
+        <a href="#resources" class="nav-link">扩展与模型包</a>
         <a href="#features" class="nav-link">核心特性</a>
         <a href="#install" class="nav-link">安装指引</a>
         <a href="#changelog" class="nav-link">更新日志</a>
@@ -67,7 +67,7 @@
       <div class="hero-badge">
         <span class="badge-dot"></span>
         <span class="badge-text">全新独立客户端 · 基于 Flutter 构建</span>
-        <span class="badge-version" id="hero-tag-version">v0.2.1</span>
+        <span class="badge-version" id="hero-tag-version">v0.2.2</span>
       </div>
 
       <!-- App Logo & Floating Graphic -->
@@ -115,7 +115,7 @@
             </div>
             <div class="btn-content">
               <span class="btn-primary-text">下载 Android 安装包 (.apk)</span>
-              <span class="btn-sub-text" id="download-asset-meta">版本 v0.2.1 · 适配 Android 8.0+</span>
+              <span class="btn-sub-text" id="download-asset-meta">版本 v0.2.2 · 通用 universal.apk · 适配 Android 8.0+</span>
             </div>
             <div class="btn-arrow">
               <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -140,7 +140,7 @@
         <div class="download-meta-strip">
           <div class="meta-item">
             <span class="meta-dot green"></span>
-            <span>架构：<b>arm64-v8a / 全机型通用</b></span>
+            <span>架构：<b>arm64-v8a / 全机型通用 Universal</b></span>
           </div>
           <div class="meta-item">
             <span class="meta-dot blue"></span>
@@ -200,8 +200,8 @@
           </div>
         </div>
 
-        <!-- Resource Card 2: .gkg Model Pack -->
-        <div class="resource-card">
+        <!-- Resource Card 2: .gkg Model Pack with Multi-Version List -->
+        <div class="resource-card gkg-card">
           <div class="resource-card-header">
             <div class="resource-icon-box purple">
               <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -210,25 +210,59 @@
             </div>
             <div class="resource-badges">
               <span class="res-tag purple">Core 决策必备</span>
-              <span class="res-tag baseline">社区基线推荐包</span>
+              <span class="res-tag baseline">跨版本聚合列表</span>
             </div>
           </div>
 
           <h3 class="resource-name">GKG 预训练决策模型协议包 (.gkg)</h3>
           <p class="resource-desc">
-            驱动本地 ONNX 引擎执行智能出牌与对局推演的核心权重包。目前由作者独立训练并持续迭代分发（作为基线模型，非全卡组万能解），完全独立于 APK 客户端，支持自由导入任意社区自训练模型。
+            驱动本地 ONNX 引擎执行智能出牌与对局推演的核心权重。模型独立于 APK 发化周期，网页会自动扫描所有 Release 聚合所有历史模型包，支持按协议与轮数自由选用。
           </p>
 
-          <div class="resource-actions">
-            <a href="https://github.com/Noctfom/Galatea-Link-mobile/releases" id="gkg-download-btn" class="res-download-btn secondary" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 5v14M19 12l-7 7-7-7"/>
-              </svg>
-              <span>获取推荐 GKG 模型包</span>
-            </a>
-            <div class="res-guide-tip">
-              💡 随 Releases 附件独立发布与演进更新
+          <!-- Model List Box -->
+          <div class="gkg-models-container">
+            <div class="gkg-models-header">
+              <span class="gkg-header-label">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 4px;">
+                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                </svg>
+                可选模型包列表 (<span id="gkg-count-badge">1</span>)
+              </span>
+              <span class="gkg-sync-status" id="gkg-sync-status">● 自动同步自 Releases 资产</span>
             </div>
+
+            <div class="gkg-models-list" id="gkg-models-list">
+              <!-- Default Skeleton / Fallback loaded instantly -->
+              <div class="gkg-model-item is-recommended" data-raw-url="https://github.com/Noctfom/Galatea-Link-mobile/releases/download/v0.2.1/GalateaV3_t800.gkg">
+                <div class="model-info-block">
+                  <div class="model-name-row">
+                    <span class="model-filename">GalateaV3_t800.gkg</span>
+                    <span class="model-badge recommend">推荐基线</span>
+                    <span class="model-badge protocol">协议 V3</span>
+                    <span class="model-badge epoch">800 轮训练</span>
+                  </div>
+                  <div class="model-meta-row">
+                    <span class="model-size">233.1 MB</span>
+                    <span class="dot-sep">·</span>
+                    <span class="model-release">来自 Release v0.2.1</span>
+                    <span class="dot-sep">·</span>
+                    <span class="model-date">2026-09-13</span>
+                  </div>
+                </div>
+                <div class="model-action-block">
+                  <a href="https://ghfast.top/https://github.com/Noctfom/Galatea-Link-mobile/releases/download/v0.2.1/GalateaV3_t800.gkg" class="model-download-btn" target="_blank" rel="noopener">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 5v14M19 12l-7 7-7-7"/>
+                    </svg>
+                    <span>下载模型</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="res-guide-tip">
+            💡 下载后将 <code>.gkg</code> 存入应用数据目录即可；多轮数或多特化模型可并存与切换
           </div>
         </div>
       </div>
@@ -330,7 +364,7 @@
           <div class="step-num">02</div>
           <h4 class="step-title">导入卡片数据库与模型包</h4>
           <p class="step-desc">
-            下载 <code>cards.cdb</code> 与推荐的 <code>.gkg</code> 权重包，放置于手机应用的数据目录下以激活完整 Core 功能。
+            下载 <code>cards.cdb</code> 与所选的 <code>.gkg</code> 权重包，放置于手机应用的数据目录下以激活完整 Core 功能。
           </p>
         </div>
 
@@ -352,18 +386,36 @@
       </div>
 
       <div class="changelog-timeline">
+        <!-- v0.2.2 Item -->
         <div class="timeline-item current">
           <div class="timeline-marker"></div>
           <div class="timeline-card">
             <div class="timeline-header">
+              <span class="version-tag">v0.2.2</span>
+              <span class="release-date">当前稳定版</span>
+              <span class="status-pill green">最新版本</span>
+            </div>
+            <ul class="release-notes-list" id="v022-notes">
+              <li><b>连接与状态：</b>修正手机本机 YGOMobile 自动等待和连接状态提示。</li>
+              <li><b>对局反馈：</b>增加详细卡组拒绝反馈，明确卡组不合法项。</li>
+              <li><b>性能优化：</b>Core 决策分段诊断与日志性能显著优化。</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- v0.2.1 Item -->
+        <div class="timeline-item">
+          <div class="timeline-marker"></div>
+          <div class="timeline-card">
+            <div class="timeline-header">
               <span class="version-tag">v0.2.1</span>
-              <span class="release-date">当前首发版本</span>
-              <span class="status-pill green">最新稳定版</span>
+              <span class="release-date">2026-09-13</span>
+              <span class="status-pill purple">含 GKG V3 基线包</span>
             </div>
             <ul class="release-notes-list">
-              <li><b>核心打通：</b>Android 模拟器与真机上的本地房间、233 在线房间连接已验证通过。</li>
+              <li><b>基线模型首发：</b>首次发布 <code>GalateaV3_t800.gkg</code> 决策模型协议包。</li>
+              <li><b>核心打通：</b>Android 模拟器与真机上的本地房间、233 在线房间连接验证通过。</li>
               <li><b>功能支持：</b>完整支持主卡组、额外卡组和副卡组上传与 GameState 维护。</li>
-              <li><b>决策模型：</b>支持 GKG 格式 2、Core V3 ONNX 原生脱机推理与 LLM 连续操作。</li>
               <li><b>日志支持：</b>新增 7 天对局脱敏日志本地存储与一键 JSONL 导出。</li>
             </ul>
           </div>
