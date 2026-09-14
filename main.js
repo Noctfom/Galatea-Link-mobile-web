@@ -1,6 +1,6 @@
 /**
  * Galatea-Link Standalone Landing Page Script
- * Supports Local update.json Sync & Dynamic GitHub Releases Aggregation
+ * Supports Multi-Mirror Acceleration, Local update.json Sync & Dynamic GitHub Releases Aggregation
  */
 
 (function () {
@@ -11,40 +11,43 @@
   const GITHUB_API_RELEASES = 'https://api.github.com/repos/' + REPO + '/releases';
   const GITHUB_API_REPO = 'https://api.github.com/repos/' + REPO;
   const LOCAL_UPDATE_JSON = './mobile/update.json';
-  
-  // Default Fallback URLs & Models
-  const FALLBACK_VERSION = 'v0.2.2';
-  const FALLBACK_APK_NAME = 'Galatea-Link-mobile-v0.2.2-universal.apk';
-  const FALLBACK_GITHUB_URL = 'https://github.com/' + REPO + '/releases/latest/download/' + FALLBACK_APK_NAME;
+
+  // Multiple Domestic Mirror Node Prefixes
+  const MIRRORS = {
+    ghfast: 'https://ghfast.top/',
+    ghproxycom: 'https://gh-proxy.com/',
+    ghproxynet: 'https://ghproxy.net/',
+    github: ''
+  };
+
+  // Upstream cards.cdb official raw link
+  const CDB_RAW_GITHUB = 'https://github.com/mycard/ygopro-database/raw/master/locales/zh-CN/cards.cdb';
+
+  // Fallback APK from current verified working Release
+  const FALLBACK_VERSION = 'v0.2.1';
+  const FALLBACK_APK_NAME = 'Galatea-Link-mobile-v0.2.1-universal.apk';
+  const FALLBACK_APK_URL = 'https://github.com/' + REPO + '/releases/download/v0.2.1/' + FALLBACK_APK_NAME;
   const FALLBACK_RELEASE_PAGE = 'https://github.com/' + REPO + '/releases';
 
-  // Initial built-in fallback GKG model list (ensures zero empty state)
+  // Built-in verified GKG model list (ensures high contrast and zero blank state)
   const FALLBACK_GKG_MODELS = [
     {
       name: 'GalateaV3_t800.gkg',
       size: 244479517,
-      download_url: 'https://github.com/Noctfom/Galatea-Link-mobile/releases/download/v0.2.1/GalateaV3_t800.gkg',
+      download_url: 'https://github.com/' + REPO + '/releases/download/v0.2.1/GalateaV3_t800.gkg',
       release_tag: 'v0.2.1',
-      published_at: '2026-09-13T00:00:00Z'
+      published_at: '2026-09-12T22:00:00Z'
     }
   ];
 
-  // Upstream cards.cdb official raw link
-  const CDB_RAW_GITHUB = 'https://raw.githubusercontent.com/mycard/ygopro-database/master/locales/zh-CN/cards.cdb';
-
-  // Domestic Mirror Proxy prefix
-  const FAST_MIRROR_PREFIX = 'https://ghfast.top/';
-
   // State
-  let currentChannel = 'mirror'; // 'mirror' | 'github'
-  let latestApkUrl = FALLBACK_GITHUB_URL;
+  let currentMirror = 'ghfast'; // 'ghfast' | 'ghproxycom' | 'ghproxynet' | 'github'
+  let latestApkUrl = FALLBACK_APK_URL;
   let currentVersion = FALLBACK_VERSION;
   let currentGkgAssets = FALLBACK_GKG_MODELS;
 
   // DOM Elements
   const mainDownloadBtn = document.getElementById('main-download-btn');
-  const channelMirrorBtn = document.getElementById('channel-mirror-btn');
-  const channelGithubBtn = document.getElementById('channel-github-btn');
   const heroTagVersion = document.getElementById('hero-tag-version');
   const downloadAssetMeta = document.getElementById('download-asset-meta');
   const starCountBadge = document.getElementById('github-star-count');
@@ -64,23 +67,21 @@
   // Helper: Parse GKG filename metadata (Protocol & Training Epochs)
   function parseGkgMetadata(filename) {
     // Protocol matching: V1, V2, V3, etc.
-    const protoMatch = filename.match(/[Vv](d+)/);
+    const protoMatch = filename.match(/[Vv](\d+)/);
     const protocol = protoMatch ? '协议 V' + protoMatch[1] : '通用协议';
 
     // Epoch/Rounds matching: _t800, epoch800, round800, step800, etc.
-    const epochMatch = filename.match(/(?:_t|epoch|round|step|t)(d+)/i);
-    const epoch = epochMatch ? epochMatch[1] + ' 轮训练' : '标准训练集';
+    const epochMatch = filename.match(/(?:_t|epoch|round|step|t)(\d+)/i);
+    const epoch = epochMatch ? epochMatch[1] + ' 轮训练' : '推荐训练集';
 
     return { protocol, epoch };
   }
 
-  // Compute active download URL
-  function getActiveUrl(rawUrl) {
+  // Compute accelerated download URL based on active mirror
+  function getAcceleratedUrl(rawUrl) {
     if (!rawUrl) return FALLBACK_RELEASE_PAGE;
-    if (currentChannel === 'mirror') {
-      return FAST_MIRROR_PREFIX + rawUrl;
-    }
-    return rawUrl;
+    const prefix = MIRRORS[currentMirror] || '';
+    return prefix + rawUrl;
   }
 
   // Render Dynamic GKG Model List
@@ -97,11 +98,11 @@
 
     gkgModelsList.innerHTML = assets.map((item, index) => {
       const isFirst = index === 0;
-      const { protocol, epoch } = parseGkgMetadata(item.name);
+      const meta = parseGkgMetadata(item.name);
       const sizeMb = item.size ? (item.size / (1024 * 1024)).toFixed(1) + ' MB' : '标准大小';
-      const dateStr = item.published_at ? item.published_at.split('T')[0] : '';
+      const dateStr = item.published_at ? item.published_at.split('T')[0] : '2026-09-12';
       const releaseText = item.release_tag ? '来自 Release ' + item.release_tag : '官方 Release';
-      const activeDownloadUrl = getActiveUrl(item.download_url);
+      const activeDownloadUrl = getAcceleratedUrl(item.download_url);
 
       return `
         <div class="gkg-model-item ${isFirst ? 'is-recommended' : ''}" data-raw-url="${item.download_url}">
@@ -109,14 +110,15 @@
             <div class="model-name-row">
               <span class="model-filename" title="${item.name}">${item.name}</span>
               ${isFirst ? '<span class="model-badge recommend">推荐基线</span>' : ''}
-              <span class="model-badge protocol">${protocol}</span>
-              <span class="model-badge epoch">${epoch}</span>
+              <span class="model-badge protocol">${meta.protocol}</span>
+              <span class="model-badge epoch">${meta.epoch}</span>
             </div>
             <div class="model-meta-row">
               <span class="model-size">${sizeMb}</span>
               <span class="dot-sep">·</span>
               <span class="model-release">${releaseText}</span>
-              ${dateStr ? '<span class="dot-sep">·</span><span class="model-date">' + dateStr + '</span>' : ''}
+              <span class="dot-sep">·</span>
+              <span class="model-date">${dateStr}</span>
             </div>
           </div>
           <div class="model-action-block">
@@ -134,7 +136,7 @@
 
   // Update All Download Buttons (APK, cards.cdb, and all GKG models)
   function updateDownloadBtn() {
-    const targetApkUrl = getActiveUrl(latestApkUrl);
+    const targetApkUrl = getAcceleratedUrl(latestApkUrl);
 
     if (mainDownloadBtn) {
       mainDownloadBtn.href = targetApkUrl;
@@ -148,7 +150,7 @@
 
     // Update cards.cdb download link
     if (cdbDownloadBtn) {
-      cdbDownloadBtn.href = getActiveUrl(CDB_RAW_GITHUB);
+      cdbDownloadBtn.href = getAcceleratedUrl(CDB_RAW_GITHUB);
     }
 
     // Update all GKG model download links
@@ -157,48 +159,29 @@
       const rawUrl = el.getAttribute('data-raw-url');
       const btn = el.querySelector('.model-download-btn');
       if (rawUrl && btn) {
-        btn.href = getActiveUrl(rawUrl);
+        btn.href = getAcceleratedUrl(rawUrl);
       }
     });
   }
 
-  // Switch Download Channel
-  function setChannel(channel) {
-    currentChannel = channel;
-    if (channel === 'mirror') {
-      channelMirrorBtn.classList.add('active');
-      channelGithubBtn.classList.remove('active');
-    } else {
-      channelGithubBtn.classList.add('active');
-      channelMirrorBtn.classList.remove('active');
-    }
+  // Switch Download Mirror Line
+  function setMirror(mirrorKey) {
+    if (!MIRRORS.hasOwnProperty(mirrorKey)) mirrorKey = 'ghfast';
+    currentMirror = mirrorKey;
+
+    // Toggle active buttons
+    document.querySelectorAll('.channel-btn').forEach(btn => {
+      if (btn.getAttribute('data-mirror') === mirrorKey) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+
     updateDownloadBtn();
   }
 
-  // 1. Check Local update.json (Instant, reliable, no API limits)
-  async function checkLocalUpdate() {
-    try {
-      const res = await fetch(LOCAL_UPDATE_JSON + '?t=' + Date.now());
-      if (res.ok) {
-        const localData = await res.json();
-        if (localData.version_name) {
-          currentVersion = 'v' + localData.version_name;
-          if (heroTagVersion) heroTagVersion.innerText = currentVersion;
-        }
-        if (localData.download_url) {
-          latestApkUrl = localData.download_url;
-        }
-        if (downloadAssetMeta) {
-          downloadAssetMeta.innerText = '版本 ' + currentVersion + ' · 通用 universal.apk · 适配 Android 8.0+';
-        }
-        updateDownloadBtn();
-      }
-    } catch (e) {
-      // Ignore local fetch error, fallback to GitHub
-    }
-  }
-
-  // 2. Fetch All Releases across History from GitHub API
+  // 1. Fetch Releases from GitHub API
   async function fetchAllReleases() {
     try {
       const res = await fetch(GITHUB_API_RELEASES);
@@ -206,7 +189,7 @@
       const releases = await res.json();
 
       if (Array.isArray(releases) && releases.length > 0) {
-        // Find latest APK if available
+        // Find latest published APK from GitHub
         const latestRel = releases[0];
         if (latestRel && Array.isArray(latestRel.assets)) {
           const apkAsset = latestRel.assets.find(a => a.name.endsWith('.apk'));
@@ -216,12 +199,12 @@
             if (heroTagVersion) heroTagVersion.innerText = currentVersion;
             const sizeMB = (apkAsset.size / (1024 * 1024)).toFixed(1);
             if (downloadAssetMeta) {
-              downloadAssetMeta.innerText = '版本 ' + currentVersion + ' · ' + sizeMB + ' MB · 适配 Android 8.0+';
+              downloadAssetMeta.innerText = '版本 ' + currentVersion + ' (稳定版) · ' + sizeMB + ' MB · 适配 Android 8.0+';
             }
           }
         }
 
-        // AGGREGATE ALL GKG MODELS ACROSS ALL RELEASES!
+        // AGGREGATE ALL GKG MODELS ACROSS ALL RELEASES
         const gkgAssets = [];
         releases.forEach(rel => {
           if (Array.isArray(rel.assets)) {
@@ -242,7 +225,7 @@
         if (gkgAssets.length > 0) {
           renderGkgModels(gkgAssets);
           if (gkgSyncStatus) {
-            gkgSyncStatus.innerText = '● 已同步 ' + gkgAssets.length + ' 个历史模型包';
+            gkgSyncStatus.innerText = '● 已同步 ' + gkgAssets.length + ' 个模型包';
           }
         } else {
           renderGkgModels(FALLBACK_GKG_MODELS);
@@ -250,7 +233,6 @@
       }
     } catch (err) {
       console.warn('Could not fetch releases from GitHub API:', err);
-      // Fallback to initial models
       renderGkgModels(FALLBACK_GKG_MODELS);
       if (gkgSyncStatus) {
         gkgSyncStatus.innerText = '● 基线模型包已就绪';
@@ -259,7 +241,7 @@
     updateDownloadBtn();
   }
 
-  // Fetch Repo Stars
+  // 2. Fetch Repo Stars
   async function fetchRepoStars() {
     try {
       const res = await fetch(GITHUB_API_REPO);
@@ -276,12 +258,13 @@
 
   // Bind Events
   function bindEvents() {
-    if (channelMirrorBtn) {
-      channelMirrorBtn.addEventListener('click', () => setChannel('mirror'));
-    }
-    if (channelGithubBtn) {
-      channelGithubBtn.addEventListener('click', () => setChannel('github'));
-    }
+    // Mirror channel toggle buttons
+    document.querySelectorAll('.channel-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const mirror = btn.getAttribute('data-mirror');
+        if (mirror) setMirror(mirror);
+      });
+    });
 
     // Modal controls
     if (openQrBtn && qrModal) {
@@ -328,6 +311,6 @@
   bindEvents();
   renderGkgModels(FALLBACK_GKG_MODELS);
   updateDownloadBtn();
-  checkLocalUpdate().then(fetchAllReleases);
+  fetchAllReleases();
   fetchRepoStars();
 })();

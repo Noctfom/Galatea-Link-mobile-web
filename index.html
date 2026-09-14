@@ -23,8 +23,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
-  <!-- Stylesheet -->
-  <link rel="stylesheet" href="./style.css">
+  <!-- Stylesheet with Cache Busting -->
+  <link rel="stylesheet" href="./style.css?v=20260914_03">
 </head>
 <body>
   <!-- Ambient Lighting Background -->
@@ -67,7 +67,7 @@
       <div class="hero-badge">
         <span class="badge-dot"></span>
         <span class="badge-text">全新独立客户端 · 基于 Flutter 构建</span>
-        <span class="badge-version" id="hero-tag-version">v0.2.2</span>
+        <span class="badge-version" id="hero-tag-version">v0.2.1</span>
       </div>
 
       <!-- App Logo & Floating Graphic -->
@@ -89,16 +89,24 @@
 
       <!-- Download Hub Component -->
       <div class="download-hub-card">
-        <!-- Download Source Channel Selector -->
+        <!-- Multi-Mirror Source Channel Selector -->
         <div class="channel-selector-bar">
-          <span class="channel-label">下载通道：</span>
+          <span class="channel-label">下载加速线路：</span>
           <div class="channel-toggle-group">
-            <button type="button" class="channel-btn active" data-channel="mirror" id="channel-mirror-btn">
+            <button type="button" class="channel-btn active" data-mirror="ghfast" id="mirror-ghfast-btn" title="高速专线 1">
               <span class="channel-icon">⚡</span>
-              <span>国内高速镜像</span>
+              <span>线路 1 (ghfast)</span>
               <span class="tag-recommend">推荐</span>
             </button>
-            <button type="button" class="channel-btn" data-channel="github" id="channel-github-btn">
+            <button type="button" class="channel-btn" data-mirror="ghproxycom" id="mirror-ghproxycom-btn" title="备用专线 2">
+              <span class="channel-icon">🚀</span>
+              <span>线路 2 (gh-proxy)</span>
+            </button>
+            <button type="button" class="channel-btn" data-mirror="ghproxynet" id="mirror-ghproxynet-btn" title="开源备用线路 3">
+              <span class="channel-icon">🛡️</span>
+              <span>线路 3 (ghproxy)</span>
+            </button>
+            <button type="button" class="channel-btn" data-mirror="github" id="mirror-github-btn" title="海外或科学网络直连">
               <span class="channel-icon">🌐</span>
               <span>GitHub 官方源</span>
             </button>
@@ -115,7 +123,7 @@
             </div>
             <div class="btn-content">
               <span class="btn-primary-text">下载 Android 安装包 (.apk)</span>
-              <span class="btn-sub-text" id="download-asset-meta">版本 v0.2.2 · 通用 universal.apk · 适配 Android 8.0+</span>
+              <span class="btn-sub-text" id="download-asset-meta">版本 v0.2.1 (稳定可用) · 110.5 MB · 适配 Android 8.0+</span>
             </div>
             <div class="btn-arrow">
               <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -148,7 +156,7 @@
           </div>
           <div class="meta-item">
             <span class="meta-dot purple"></span>
-            <span>协议：<b>YGOPro / MDPro3 原生直连</b></span>
+            <span>提示：<b>若某条线路下载缓慢，点击上方切换「线路 2」或「线路 3」</b></span>
           </div>
         </div>
       </div>
@@ -195,7 +203,7 @@
               <span>下载 cards.cdb (中文最新)</span>
             </a>
             <div class="res-guide-tip">
-              💡 下载后放入应用本地数据目录即可自动生效
+              💡 下载后放入手机应用本地存储目录即可自动生效
             </div>
           </div>
         </div>
@@ -216,7 +224,7 @@
 
           <h3 class="resource-name">GKG 预训练决策模型协议包 (.gkg)</h3>
           <p class="resource-desc">
-            驱动本地 ONNX 引擎执行智能出牌与对局推演的核心权重。模型独立于 APK 发化周期，网页会自动扫描所有 Release 聚合所有历史模型包，支持按协议与轮数自由选用。
+            驱动本地 ONNX 引擎执行智能出牌与对局推演的核心权重。模型独立于客户端发版周期，网页会自动扫描所有 Release 聚合所有历史模型包，支持按协议与轮数自由选用。
           </p>
 
           <!-- Model List Box -->
@@ -232,7 +240,7 @@
             </div>
 
             <div class="gkg-models-list" id="gkg-models-list">
-              <!-- Default Skeleton / Fallback loaded instantly -->
+              <!-- Built-in high contrast model item -->
               <div class="gkg-model-item is-recommended" data-raw-url="https://github.com/Noctfom/Galatea-Link-mobile/releases/download/v0.2.1/GalateaV3_t800.gkg">
                 <div class="model-info-block">
                   <div class="model-name-row">
@@ -242,11 +250,11 @@
                     <span class="model-badge epoch">800 轮训练</span>
                   </div>
                   <div class="model-meta-row">
-                    <span class="model-size">233.1 MB</span>
+                    <span class="model-size">233.2 MB</span>
                     <span class="dot-sep">·</span>
                     <span class="model-release">来自 Release v0.2.1</span>
                     <span class="dot-sep">·</span>
-                    <span class="model-date">2026-09-13</span>
+                    <span class="model-date">2026-09-12</span>
                   </div>
                 </div>
                 <div class="model-action-block">
@@ -386,16 +394,16 @@
       </div>
 
       <div class="changelog-timeline">
-        <!-- v0.2.2 Item -->
-        <div class="timeline-item current">
+        <!-- v0.2.2 Coming Soon Item -->
+        <div class="timeline-item">
           <div class="timeline-marker"></div>
           <div class="timeline-card">
             <div class="timeline-header">
               <span class="version-tag">v0.2.2</span>
-              <span class="release-date">当前稳定版</span>
-              <span class="status-pill green">最新版本</span>
+              <span class="release-date">版本筹备中 · 待发布</span>
+              <span class="status-pill purple">预备版本</span>
             </div>
-            <ul class="release-notes-list" id="v022-notes">
+            <ul class="release-notes-list">
               <li><b>连接与状态：</b>修正手机本机 YGOMobile 自动等待和连接状态提示。</li>
               <li><b>对局反馈：</b>增加详细卡组拒绝反馈，明确卡组不合法项。</li>
               <li><b>性能优化：</b>Core 决策分段诊断与日志性能显著优化。</li>
@@ -404,13 +412,13 @@
         </div>
 
         <!-- v0.2.1 Item -->
-        <div class="timeline-item">
+        <div class="timeline-item current">
           <div class="timeline-marker"></div>
           <div class="timeline-card">
             <div class="timeline-header">
               <span class="version-tag">v0.2.1</span>
-              <span class="release-date">2026-09-13</span>
-              <span class="status-pill purple">含 GKG V3 基线包</span>
+              <span class="release-date">2026-09-12</span>
+              <span class="status-pill green">当前已上线稳定版</span>
             </div>
             <ul class="release-notes-list">
               <li><b>基线模型首发：</b>首次发布 <code>GalateaV3_t800.gkg</code> 决策模型协议包。</li>
@@ -475,7 +483,7 @@
     </div>
   </footer>
 
-  <!-- Main JavaScript -->
-  <script src="./main.js"></script>
+  <!-- Main JavaScript with Cache Busting -->
+  <script src="./main.js?v=20260914_03"></script>
 </body>
 </html>
